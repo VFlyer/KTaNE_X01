@@ -349,6 +349,85 @@ public class x01_script : MonoBehaviour
                                 }
                             }
                         }
+                        else
+                        {
+                            // Check that no segment is used more than once. Restriction I will cover this already, but if the player doesn't
+                            // have that restriction, we need to check here. Singles can be used twice, but everything else cannot be used more than once.
+                            bool[] candidatePressed = new bool[42];
+                            for (int candidateIter=0; candidateIter < individualDarts.Length; candidateIter++)
+                            {
+                                if (individualDarts[iter] == "SB")
+                                {
+                                    if (candidatePressed[40])
+                                    {
+                                        thisSolutionIsValid = false;
+                                    }
+                                    else
+                                    {
+                                        candidatePressed[40] = true;
+                                    }
+                                }
+                                else if (individualDarts[iter] == "DB")
+                                {
+                                    if (candidatePressed[41])
+                                    {
+                                        thisSolutionIsValid = false;
+                                    }
+                                    else
+                                    {
+                                        candidatePressed[41] = true;
+                                    }
+                                }
+                                else 
+                                {
+                                    int segVal = -1;
+                                    if (int.TryParse(individualDarts[iter].Substring(1), out segVal))
+                                    {
+                                        int segValIndex = GetSegIndexForValue(segVal);
+                                        if (individualDarts[iter].StartsWith("S"))
+                                        {
+                                            if (candidatePressed[segVal])
+                                            {
+                                                if (candidatePressed[10 + segVal])
+                                                {
+                                                    thisSolutionIsValid = false;
+                                                }
+                                                else
+                                                {
+                                                    candidatePressed[10 + segVal] = true;
+                                                }
+                                            }
+                                            else
+                                            {
+                                                candidatePressed[segVal] = true;
+                                            }
+                                        }
+                                        else if (individualDarts[iter].StartsWith("D"))
+                                        {
+                                            if (candidatePressed[20 + segVal])
+                                            {
+                                                thisSolutionIsValid = false;
+                                            }
+                                            else
+                                            {
+                                                candidatePressed[20 + segVal] = true;
+                                            }
+                                        }
+                                        else if (individualDarts[iter].StartsWith("T"))
+                                        {
+                                            if (candidatePressed[30 + segVal])
+                                            {
+                                                thisSolutionIsValid = false;
+                                            }
+                                            else
+                                            {
+                                                candidatePressed[30 + segVal] = true;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
 
                         if (thisSolutionIsValid)
                         {
