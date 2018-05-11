@@ -73,6 +73,19 @@ public class x01_script : MonoBehaviour
         GenerateRandomBoard();
         ObtainTargetScore();
         ObtainDartCountAndRestrictionSet();
+
+        // For debugging purposes, you can set a specific situation here, like this.
+        if (false)
+        {
+            segValues = new List<int>() { 4, 3, 17, 9, 8, 19, 5, 14, 16, 11 };
+            doubleValues = new List<int>() { 8, 6, 34, 18, 16, 38, 10, 28, 32, 22 };
+            trebleValues = new List<int>() { 12, 9, 51, 27, 24, 57, 15, 42, 48, 33 };
+
+            TargetScore = 71;
+            TotalDartsToThrow = 4;
+            Restrictions = "CEI";
+        }
+
         while (!IsPuzzleSovable())
         {
             GenerateRandomBoard();
@@ -344,8 +357,11 @@ public class x01_script : MonoBehaviour
                                 int thisDartScore = GetDartScore(individualDarts[candidateIter]);
                                 if (pointsScored.ContainsKey(thisDartScore))
                                 {
-                                    pointsScored.Add(thisDartScore, thisDartScore);
                                     thisSolutionIsValid = false;
+                                }
+                                else
+                                {
+                                    pointsScored.Add(thisDartScore, thisDartScore);
                                 }
                             }
                         }
@@ -356,7 +372,7 @@ public class x01_script : MonoBehaviour
                             bool[] candidatePressed = new bool[42];
                             for (int candidateIter=0; candidateIter < individualDarts.Length; candidateIter++)
                             {
-                                if (individualDarts[iter] == "SB")
+                                if (individualDarts[candidateIter] == "SB")
                                 {
                                     if (candidatePressed[40])
                                     {
@@ -367,7 +383,7 @@ public class x01_script : MonoBehaviour
                                         candidatePressed[40] = true;
                                     }
                                 }
-                                else if (individualDarts[iter] == "DB")
+                                else if (individualDarts[candidateIter] == "DB")
                                 {
                                     if (candidatePressed[41])
                                     {
@@ -381,47 +397,47 @@ public class x01_script : MonoBehaviour
                                 else 
                                 {
                                     int segVal = -1;
-                                    if (int.TryParse(individualDarts[iter].Substring(1), out segVal))
+                                    if (int.TryParse(individualDarts[candidateIter].Substring(1), out segVal))
                                     {
                                         int segValIndex = GetSegIndexForValue(segVal);
-                                        if (individualDarts[iter].StartsWith("S"))
+                                        if (individualDarts[candidateIter].StartsWith("S"))
                                         {
-                                            if (candidatePressed[segVal])
+                                            if (candidatePressed[segValIndex])
                                             {
-                                                if (candidatePressed[10 + segVal])
+                                                if (candidatePressed[10 + segValIndex])
                                                 {
                                                     thisSolutionIsValid = false;
                                                 }
                                                 else
                                                 {
-                                                    candidatePressed[10 + segVal] = true;
+                                                    candidatePressed[10 + segValIndex] = true;
                                                 }
                                             }
                                             else
                                             {
-                                                candidatePressed[segVal] = true;
+                                                candidatePressed[segValIndex] = true;
                                             }
                                         }
-                                        else if (individualDarts[iter].StartsWith("D"))
+                                        else if (individualDarts[candidateIter].StartsWith("D"))
                                         {
-                                            if (candidatePressed[20 + segVal])
+                                            if (candidatePressed[20 + segValIndex])
                                             {
                                                 thisSolutionIsValid = false;
                                             }
                                             else
                                             {
-                                                candidatePressed[20 + segVal] = true;
+                                                candidatePressed[20 + segValIndex] = true;
                                             }
                                         }
-                                        else if (individualDarts[iter].StartsWith("T"))
+                                        else if (individualDarts[candidateIter].StartsWith("T"))
                                         {
-                                            if (candidatePressed[30 + segVal])
+                                            if (candidatePressed[30 + segValIndex])
                                             {
                                                 thisSolutionIsValid = false;
                                             }
                                             else
                                             {
-                                                candidatePressed[30 + segVal] = true;
+                                                candidatePressed[30 + segValIndex] = true;
                                             }
                                         }
                                     }
@@ -489,7 +505,8 @@ public class x01_script : MonoBehaviour
                         // No point in checking if this treble busts us.
                         if (segValues[iter] < remainingScore)
                         {
-                            AttemptToClose(remainingScore - segValues[iter], dartsRemaining - 1, solutionSoFar + "S" + segValues[iter] + " ");
+                            string segNotation = (iter == 10 ? "B" : segValues[iter].ToString());
+                            AttemptToClose(remainingScore - segValues[iter], dartsRemaining - 1, solutionSoFar + "S" + segNotation + " ");
                         }
                     }
                 }
@@ -1014,11 +1031,11 @@ public class x01_script : MonoBehaviour
         }
     }
 
-    public string TwitchHelpMessage = "Press segments with !{0} press (SegmentName). Use IN and OUT for singles (e.g. IN6, OUT20), D for doubles (D16), T for trebles (T13), SB and DB for single and double bullseye. You can press multiples at a time (e.g. \"!{0} press T3 Outer15 D20\")";
+    public string TwitchHelpMessage = "Select segments with !{0} throw (SegmentName). Use IN and OUT for singles (e.g. IN6, OUT20), D for doubles (D16), T for trebles (T13), SB and DB for single and double bullseye. You can select multiple segments at a time (e.g. \"!{0} throw T3 OUT15 D20\")";
     public KMSelectable[] ProcessTwitchCommand(string command)
     {
         string[] parts = command.ToUpper().Split(new char[] { ' ' }, System.StringSplitOptions.RemoveEmptyEntries);
-        if (parts[0].Equals("PRESS"))
+        if (parts[0].Equals("THROW"))
         {
             bool noErrors = true;
             List<int> buttonsToPress = new List<int>();

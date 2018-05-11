@@ -302,64 +302,6 @@ Prefab:
       propertyPath: m_RootOrder
       value: 3
       objectReference: {fileID: 0}
-    - target: {fileID: 4014423581620708, guid: 72576aa45727f9147b1a27622e2ddf5c, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: 0.0205
-      objectReference: {fileID: 0}
-    - target: {fileID: 114465536478586408, guid: 72576aa45727f9147b1a27622e2ddf5c,
-        type: 2}
-      propertyPath: ShaderNames.Array.data[0]
-      value: GUI/KT 3D Text
-      objectReference: {fileID: 0}
-    - target: {fileID: 114507739831580464, guid: 72576aa45727f9147b1a27622e2ddf5c,
-        type: 2}
-      propertyPath: ShaderNames.Array.data[0]
-      value: GUI/KT 3D Text
-      objectReference: {fileID: 0}
-    - target: {fileID: 114585523756539580, guid: 72576aa45727f9147b1a27622e2ddf5c,
-        type: 2}
-      propertyPath: ShaderNames.Array.data[0]
-      value: GUI/KT 3D Text
-      objectReference: {fileID: 0}
-    - target: {fileID: 114768146555910710, guid: 72576aa45727f9147b1a27622e2ddf5c,
-        type: 2}
-      propertyPath: ShaderNames.Array.data[0]
-      value: GUI/KT 3D Text
-      objectReference: {fileID: 0}
-    - target: {fileID: 114258458550753998, guid: 72576aa45727f9147b1a27622e2ddf5c,
-        type: 2}
-      propertyPath: ShaderNames.Array.data[0]
-      value: GUI/KT 3D Text
-      objectReference: {fileID: 0}
-    - target: {fileID: 114131618290024824, guid: 72576aa45727f9147b1a27622e2ddf5c,
-        type: 2}
-      propertyPath: ShaderNames.Array.data[0]
-      value: GUI/KT 3D Text
-      objectReference: {fileID: 0}
-    - target: {fileID: 114072098442742588, guid: 72576aa45727f9147b1a27622e2ddf5c,
-        type: 2}
-      propertyPath: ShaderNames.Array.data[0]
-      value: GUI/KT 3D Text
-      objectReference: {fileID: 0}
-    - target: {fileID: 114899085186104404, guid: 72576aa45727f9147b1a27622e2ddf5c,
-        type: 2}
-      propertyPath: ShaderNames.Array.data[0]
-      value: GUI/KT 3D Text
-      objectReference: {fileID: 0}
-    - target: {fileID: 114629965071942070, guid: 72576aa45727f9147b1a27622e2ddf5c,
-        type: 2}
-      propertyPath: ShaderNames.Array.data[0]
-      value: GUI/KT 3D Text
-      objectReference: {fileID: 0}
-    - target: {fileID: 114853188859785620, guid: 72576aa45727f9147b1a27622e2ddf5c,
-        type: 2}
-      propertyPath: ShaderNames.Array.data[0]
-      value: GUI/KT 3D Text
-      objectReference: {fileID: 0}
-    - target: {fileID: 4014423581620708, guid: 72576aa45727f9147b1a27622e2ddf5c, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: 0.0758
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 72576aa45727f9147b1a27622e2ddf5c, type: 2}
   m_IsPrefabParent: 0

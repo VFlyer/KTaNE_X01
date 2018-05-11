@@ -10279,7 +10279,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ModuleType: X01
-  ModuleDisplayName: X01 Darts
+  ModuleDisplayName: X01
   RequiresTimerVisibility: 0
 --- !u!114 &114539349281385090
 MonoBehaviour:
