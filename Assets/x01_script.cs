@@ -101,10 +101,10 @@ public class x01_script : MonoBehaviour
             SegmentLabelObjects[iter].text = segValues[iter].ToString();
         }
 
-        Debug.LogFormat("[X01 #{0}] Generated a solvable board with {1} correct solutions. For example, {2} .", _moduleId, CorrectSolutions.Count, CorrectSolutions[0].ToString());
+        Debug.LogFormat("[X01 #{0}] Generated a solvable board with {1} correct solutions. For example, {2}.", _moduleId, CorrectSolutions.Count, CorrectSolutions[0].ToString());
         Debug.LogFormat("[X01 #{0}] Segment Values, clockwise, starting with North: {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}", _moduleId, segValues[0], segValues[1], segValues[2], segValues[3], segValues[4],
             segValues[5], segValues[6], segValues[7], segValues[8], segValues[9]);
-        Debug.LogFormat("[X01 #{0}] Defuser needs to throw {1} darts for exactly {2} points, with restrictions: {3} .", _moduleId, TotalDartsToThrow, TargetScore, Restrictions);
+        Debug.LogFormat("[X01 #{0}] Defuser needs to throw {1} darts for exactly {2} points, with restrictions: {3}.", _moduleId, TotalDartsToThrow, TargetScore, Restrictions);
     }
     private void GenerateRandomBoard()
     {
@@ -612,7 +612,7 @@ public class x01_script : MonoBehaviour
                 segDesc = "something weird. Unhandled!";
                 break;
         }
-        Debug.LogFormat("[X01 #{0}] User pressed {1}, valued at {2}.", _moduleId, segDesc, pressedValue);
+        Debug.LogFormat("[X01 #{0}] Defuser pressed {1}, valued at {2}.", _moduleId, segDesc, pressedValue);
         if (buttonHasBeenPressed[buttonIndex])
         {
             Debug.LogFormat("[X01 #{0}] This segment has been used already. Strike assessed. Resetting module.", _moduleId);
@@ -1035,7 +1035,7 @@ public class x01_script : MonoBehaviour
     public KMSelectable[] ProcessTwitchCommand(string command)
     {
         string[] parts = command.ToUpper().Split(new char[] { ' ' }, System.StringSplitOptions.RemoveEmptyEntries);
-        if (parts[0].Equals("THROW"))
+        if (parts[0].Equals("THROW") || parts[0].Equals("PRESS"))
         {
             bool noErrors = true;
             List<int> buttonsToPress = new List<int>();
