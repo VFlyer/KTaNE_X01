@@ -12,6 +12,7 @@ public class x01_script : MonoBehaviour
     public KMBombInfo BombInfo;
     public KMSelectable[] Buttons;
     public TextMesh[] SegmentLabelObjects;
+    public GameObject[] DartObjects;
 
     private static int[,] targetScores = new int[5, 3] { { 74, 53, 79 }, { 62, 41, 70 }, { 42, 47, 86 }, { 38, 66, 51 }, { 80, 67, 58 } };
     private List<int> segValues;
@@ -89,9 +90,17 @@ public class x01_script : MonoBehaviour
         }
     }
 
+    private void HideAllPlayerDarts()
+    {
+        for (int iter = 0; iter < DartObjects.Length; iter++)
+        {
+            DartObjects[iter].SetActive(false);
+        }
+    }
     private void GenerateSolvablePuzzle()
     {
         ResetUsedSegments();
+        HideAllPlayerDarts();
 
         GenerateRandomBoard();
         ObtainTargetScore();
@@ -824,6 +833,7 @@ public class x01_script : MonoBehaviour
         {
             // Module Solved!!!
             Audio.PlaySoundAtTransform("disarmed", Module.transform);
+            RenderPlayerDart(TotalDartsToThrow-1, buttonIndex);
             Module.HandlePass();
             isModuleSolved = true;
             Debug.LogFormat("[X01 #{0}] Module Solved with Solution: {1}", _moduleId, PlayerDartHistory);
@@ -839,6 +849,7 @@ public class x01_script : MonoBehaviour
         }
 
         // Play dart sound
+        RenderPlayerDart(TotalDartsToThrow - PlayerDartsRemaining - 1, buttonIndex);
         Audio.PlaySoundAtTransform("gooddart", Module.transform);
 
     }
@@ -1059,8 +1070,51 @@ public class x01_script : MonoBehaviour
         }
     }
 
+    private void RenderPlayerDart(int dartIndex, int buttonIndex)
+    {
+        DartObjects[dartIndex].SetActive(true);
+        Transform childTransform = DartObjects[dartIndex].transform.GetChild(0);
+        float radius = 0;
+        if (buttonIndex < 10)
+        {
+            radius = 0.067f;
+        }
+        else if (buttonIndex < 20)
+        {
+            radius = 0.032f;
+        }
+        else if (buttonIndex < 30)
+        {
+            radius = 0.087f;
+        }
+        else if (buttonIndex < 40)
+        {
+            radius = 0.049f;
+        }
+        else if (buttonIndex == 40)
+        {
+            radius = 0.013f;
+        }
+        else if (buttonIndex == 41)
+        {
+            radius = 0.004f;
+        }
+
+        float angle = 0;
+        if (buttonIndex < 40)
+        {
+            angle = Mathf.PI / 2 - (Mathf.PI / 5 * (buttonIndex % 10)) + Random.Range(Mathf.PI / -14, Mathf.PI / 14);
+        }
+        else
+        {
+            angle = 2 * Mathf.PI * Random.Range(0f, 1f);
+        }
+        childTransform.localPosition = new Vector3(Mathf.Cos(angle) * radius, 0, Mathf.Sin(angle) * radius);
+        childTransform.localRotation = Quaternion.Euler(Random.Range(-10f, 10f), 0, Random.Range(-10f, 10f));
+    }
+
     public string TwitchHelpMessage = "Select segments with !{0} throw (SegmentName). Use IN and OUT for singles (e.g. IN6, OUT20), D for doubles (D16), T for trebles (T13), SB and DB for single and double bullseye. You can select multiple segments at a time (e.g. \"!{0} throw T3 OUT15 D20\")";
-    public KMSelectable[] ProcessTwitchCommand(string command)
+    IEnumerator ProcessTwitchCommand(string command)
     {
         string[] parts = command.ToUpper().Split(new char[] { ' ' }, System.StringSplitOptions.RemoveEmptyEntries);
         if (parts[0].Equals("THROW") || parts[0].Equals("PRESS"))
@@ -1169,11 +1223,19 @@ public class x01_script : MonoBehaviour
                 {
                     retButtons[iter] = Buttons[buttonsToPress[iter]];
                 }
-                return retButtons;
+
+                for (int iter=0; iter < retButtons.Length; iter++)
+                {
+                    yield return retButtons[iter];
+                    if (iter != retButtons.Length - 1)
+                    {
+                        yield return new WaitForSeconds(1.2f);
+                    }
+                }
             }
         }
 
-        return null;
+        yield break;
     }
     private int GetSegIndexForValue(int val)
     {
