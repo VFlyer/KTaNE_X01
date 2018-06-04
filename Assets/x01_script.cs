@@ -33,18 +33,41 @@ public class x01_script : MonoBehaviour
     private bool isModuleSolved = false;
     private bool isLightsOn = false;
 
+    // Animation Stuff
+    private float fadeDuration = 0.6f;
+    private float fadeOffset = 0.15f;
+    private float[] fadeInStartTimes;
+    private bool isShowHappening = false;
+
     // Use this for initialization
     void Start()
     {
         _moduleId = _moduleIdCounter++;
         Module.OnActivate += Activate;
-        
+
+        fadeInStartTimes = new float[10];
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        if (isShowHappening)
+        {
+            bool allShowsFinished = true;
+            for (int showIter = 0; showIter < 10; showIter++)
+            {
+                if (Time.time < fadeInStartTimes[showIter] + fadeDuration)
+                {
+                    SegmentLabelObjects[showIter].text = segValues[showIter].ToString();
+                    allShowsFinished = false;
+                    SegmentLabelObjects[showIter].color = Color.Lerp(Color.clear, Color.black, ((Time.time - fadeInStartTimes[showIter]) / fadeDuration));
+                }
+            }
+            if (allShowsFinished)
+            {
+                isShowHappening = false;
+            }
+        }
     }
 
     void Activate()
@@ -96,10 +119,7 @@ public class x01_script : MonoBehaviour
         PlayerScoreRemaining = TargetScore;
         PlayerDartHistory = string.Empty;
 
-        for (int iter = 0; iter < 10; iter++)
-        {
-            SegmentLabelObjects[iter].text = segValues[iter].ToString();
-        }
+        DisplaySegmentValues();
 
         Debug.LogFormat("[X01 #{0}] Generated a solvable board with {1} correct solutions. For example, {2}.", _moduleId, CorrectSolutions.Count, CorrectSolutions[0].ToString());
         Debug.LogFormat("[X01 #{0}] Segment Values, clockwise, starting with North: {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}", _moduleId, segValues[0], segValues[1], segValues[2], segValues[3], segValues[4],
@@ -565,6 +585,14 @@ public class x01_script : MonoBehaviour
         CorrectSolutions = new List<string>();
         AttemptToClose(TargetScore, TotalDartsToThrow, string.Empty);
         return (CorrectSolutions.Count > 0);
+    }
+    private void DisplaySegmentValues()
+    {
+        for (int iter = 0; iter < SegmentLabelObjects.Length; iter++)
+        {
+            fadeInStartTimes[iter] = Time.time + iter * fadeOffset;
+        }
+        isShowHappening = true;
     }
 
     private void HandlePress(int buttonIndex)
