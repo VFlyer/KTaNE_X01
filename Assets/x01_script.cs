@@ -88,6 +88,7 @@ public class x01_script : MonoBehaviour
                 return false;
             };
         }
+        HideAllPlayerDarts();
     }
 
     private void HideAllPlayerDarts()
@@ -100,7 +101,6 @@ public class x01_script : MonoBehaviour
     private void GenerateSolvablePuzzle()
     {
         ResetUsedSegments();
-        HideAllPlayerDarts();
 
         GenerateRandomBoard();
         ObtainTargetScore();
@@ -654,6 +654,7 @@ public class x01_script : MonoBehaviour
         {
             Debug.LogFormat("[X01 #{0}] This segment has been used already. Strike assessed. Resetting module.", _moduleId);
             Module.HandleStrike();
+            HideAllPlayerDarts();
             GenerateSolvablePuzzle();
             return;
         }
@@ -819,6 +820,7 @@ public class x01_script : MonoBehaviour
         {
             Debug.LogFormat("[X01 #{0}] Strike assessed. Resetting module.", _moduleId);
             Module.HandleStrike();
+            HideAllPlayerDarts();
             GenerateSolvablePuzzle();
             return;
         }
@@ -844,6 +846,7 @@ public class x01_script : MonoBehaviour
         {
             Debug.LogFormat("[X01 #{0}] However, there is no way to close {1} points with {2} dart(s), while following all restrictions, at this point. Strike assessed, resetting module.", _moduleId, PlayerScoreRemaining, PlayerDartsRemaining);
             Module.HandleStrike();
+            HideAllPlayerDarts();
             GenerateSolvablePuzzle();
             return;
         }
