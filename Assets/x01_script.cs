@@ -1227,6 +1227,7 @@ public class x01_script : MonoBehaviour
                     retButtons[iter] = Buttons[buttonsToPress[iter]];
                 }
 
+                yield return null;
                 for (int iter=0; iter < retButtons.Length; iter++)
                 {
                     yield return retButtons[iter];
