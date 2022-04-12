@@ -881,7 +881,6 @@ public class x01_script : MonoBehaviour
         Audio.PlaySoundAtTransform("gooddart", Module.transform);
 
     }
-    // AAAAAAAAAAAAAAAAAAA
 
     private bool PlayerHasPathToSolution(int remainingScore, int dartsRemaining, string solutionSoFar)
     {
@@ -1148,13 +1147,6 @@ public class x01_script : MonoBehaviour
     public string TwitchHelpMessage = "Select segments with !{0} throw (SegmentName). Use IN and OUT for singles (e.g. IN6, OUT20), D for doubles (D16), T for trebles (T13), SB and DB for single and double bullseye. You can select multiple segments at a time (e.g. \"!{0} throw T3 OUT15 D20\")";
     IEnumerator ProcessTwitchCommand(string command)
     {
-        var m = Regex.Match(command, @"^\s*close\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
-        if (m.Success)
-        {
-            yield return null;
-            Debug.Log(CorrectSolutions[0]);
-            yield break;
-        }
         string[] parts = command.ToUpper().Split(new char[] { ' ' }, System.StringSplitOptions.RemoveEmptyEntries);
         if (parts[0].Equals("THROW") || parts[0].Equals("PRESS"))
         {
