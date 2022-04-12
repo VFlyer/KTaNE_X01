@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using KMUtils;
+using KModkit;
+using System;
+using Random = UnityEngine.Random;
+using System.Text.RegularExpressions;
 
 public class x01_script : MonoBehaviour
 {
@@ -39,6 +42,10 @@ public class x01_script : MonoBehaviour
     private float fadeOffset = 0.15f;
     private float[] fadeInStartTimes;
     private bool isShowHappening = false;
+
+    // For autosolver
+    private string[] indivDarts;
+    private List<int> _pathBtns;
 
     // Use this for initialization
     void Start()
@@ -109,13 +116,13 @@ public class x01_script : MonoBehaviour
         // For debugging purposes, you can set a specific situation here, like this.
         if (false)
         {
-            segValues = new List<int>() { 4, 3, 17, 9, 8, 19, 5, 14, 16, 11 };
-            doubleValues = new List<int>() { 8, 6, 34, 18, 16, 38, 10, 28, 32, 22 };
-            trebleValues = new List<int>() { 12, 9, 51, 27, 24, 57, 15, 42, 48, 33 };
+            segValues = new List<int>() { 2, 1, 5, 4, 17, 10, 6, 13, 7, 12 };
+            doubleValues = segValues.Select(i => i * 2).ToList();
+            trebleValues = segValues.Select(i => i * 3).ToList();
 
             TargetScore = 71;
-            TotalDartsToThrow = 4;
-            Restrictions = "CEI";
+            TotalDartsToThrow = 3;
+            Restrictions = "CG";
         }
 
         while (!IsPuzzleSovable())
@@ -280,7 +287,7 @@ public class x01_script : MonoBehaviour
     private void ResetUsedSegments()
     {
         buttonHasBeenPressed = new bool[42];
-        for (int iter=0; iter < 42; iter++)
+        for (int iter = 0; iter < 42; iter++)
         {
             buttonHasBeenPressed[iter] = false;
         }
@@ -317,7 +324,7 @@ public class x01_script : MonoBehaviour
 
                         if (thisSolutionIsValid && Restrictions.Contains("A"))
                         {
-                            for (int candidateIter= 0; candidateIter < individualDarts.Length && thisSolutionIsValid; candidateIter++)
+                            for (int candidateIter = 0; candidateIter < individualDarts.Length && thisSolutionIsValid; candidateIter++)
                             {
                                 if (individualDarts[candidateIter].StartsWith("S"))
                                 {
@@ -399,7 +406,7 @@ public class x01_script : MonoBehaviour
                             // Check that no segment is used more than once. Restriction I will cover this already, but if the player doesn't
                             // have that restriction, we need to check here. Singles can be used twice, but everything else cannot be used more than once.
                             bool[] candidatePressed = new bool[42];
-                            for (int candidateIter=0; candidateIter < individualDarts.Length; candidateIter++)
+                            for (int candidateIter = 0; candidateIter < individualDarts.Length; candidateIter++)
                             {
                                 if (individualDarts[candidateIter] == "SB")
                                 {
@@ -423,7 +430,7 @@ public class x01_script : MonoBehaviour
                                         candidatePressed[41] = true;
                                     }
                                 }
-                                else 
+                                else
                                 {
                                     int segVal = -1;
                                     if (int.TryParse(individualDarts[candidateIter].Substring(1), out segVal))
@@ -496,7 +503,7 @@ public class x01_script : MonoBehaviour
                     AttemptToClose(remainingScore - 25, dartsRemaining - 1, "SB ");
                 }
             }
-            
+
             if (Restrictions.Contains("F") && (dartsRemaining == TotalDartsToThrow))
             {
                 bTryEveryPossibleCombo = false;
@@ -556,14 +563,14 @@ public class x01_script : MonoBehaviour
                     }
                 }
             }
-            
+
             if (bTryEveryPossibleCombo)
             {
                 for (int singlesIter = 0; singlesIter < segValues.Count; singlesIter++)
                 {
                     AttemptToClose(remainingScore - segValues[singlesIter], dartsRemaining - 1, solutionSoFar + "S" + (singlesIter == 10 ? "B" : segValues[singlesIter].ToString()) + " ");
                 }
-                if (dartsRemaining != 2 || ((remainingScore%2) !=1 ))
+                if (dartsRemaining != 2 || ((remainingScore % 2) != 1))
                 {
                     for (int doublesIter = 0; doublesIter < doubleValues.Count; doublesIter++)
                     {
@@ -653,6 +660,7 @@ public class x01_script : MonoBehaviour
         if (buttonHasBeenPressed[buttonIndex])
         {
             Debug.LogFormat("[X01 #{0}] This segment has been used already. Strike assessed. Resetting module.", _moduleId);
+            _pathBtns = new List<int>();
             Module.HandleStrike();
             HideAllPlayerDarts();
             GenerateSolvablePuzzle();
@@ -668,7 +676,7 @@ public class x01_script : MonoBehaviour
         // Check If Restrictions Followed
         if (Restrictions.Contains("A"))
         {
-            if (buttonIndex < 20 && ((pressedValue % 2) ==1))
+            if (buttonIndex < 20 && ((pressedValue % 2) == 1))
             {
                 Debug.LogFormat("[X01 #{0}] Used a single area of an odd-value segment (Restriction A).", _moduleId);
                 restrictionViolationFound = true;
@@ -691,7 +699,7 @@ public class x01_script : MonoBehaviour
             if (PlayerDartsRemaining == 0)
             {
                 bool usedABottomHalfOfBoardDouble = false;
-                for (int iter=23; iter<=27; iter++)
+                for (int iter = 23; iter <= 27; iter++)
                 {
                     if (buttonHasBeenPressed[iter])
                     {
@@ -710,7 +718,7 @@ public class x01_script : MonoBehaviour
             if (PlayerDartsRemaining == 0)
             {
                 bool usedAGreenDoubleToClose = false;
-                for (int iter = 21; iter <= 29; iter+=2)
+                for (int iter = 21; iter <= 29; iter += 2)
                 {
                     if (buttonIndex == iter)
                     {
@@ -727,7 +735,7 @@ public class x01_script : MonoBehaviour
         if (Restrictions.Contains("E") && !restrictionViolationFound)
         {
             if (PlayerDartsRemaining == 0)
-            { 
+            {
                 if (!buttonHasBeenPressed[40])
                 {
                     Debug.LogFormat("[X01 #{0}] Single bullseye not used (Restriction E).", _moduleId);
@@ -759,7 +767,7 @@ public class x01_script : MonoBehaviour
             if (PlayerDartsRemaining == 0)
             {
                 bool usedASingle = false, usedADouble = false, usedATreble = false;
-                for (int iter=0; iter <40; iter++)
+                for (int iter = 0; iter <= 41; iter++)
                 {
                     if (buttonHasBeenPressed[iter])
                     {
@@ -808,12 +816,12 @@ public class x01_script : MonoBehaviour
         if (Restrictions.Contains("I") && !restrictionViolationFound)
         {
             string[] individualPlayerDarts = PlayerDartHistory.Split(new char[] { ' ' }, System.StringSplitOptions.RemoveEmptyEntries);
-            for (int iter=0; iter < individualPlayerDarts.Length - 1; iter++)
+            for (int iter = 0; iter < individualPlayerDarts.Length - 1; iter++)
             {
                 int prevDartValue = GetDartScore(individualPlayerDarts[iter]);
                 if (prevDartValue == pressedValue)
                 {
-                    Debug.LogFormat("[X01 #{0}] Dart Value of {1} was already scored on Dart #{2} (Restriction I).", _moduleId, pressedValue, (iter+1));
+                    Debug.LogFormat("[X01 #{0}] Dart Value of {1} was already scored on Dart #{2} (Restriction I).", _moduleId, pressedValue, (iter + 1));
                     restrictionViolationFound = true;
                     break;
                 }
@@ -829,7 +837,6 @@ public class x01_script : MonoBehaviour
             return;
         }
         #endregion
-
         // Congratulations! You passed all restrictions! But can you still close out? Let's find out.
         // Score the thrown dart
         PlayerScoreRemaining -= pressedValue;
@@ -839,11 +846,23 @@ public class x01_script : MonoBehaviour
         {
             // Module Solved!!!
             Audio.PlaySoundAtTransform("disarmed", Module.transform);
-            RenderPlayerDart(TotalDartsToThrow-1, buttonIndex);
+            RenderPlayerDart(TotalDartsToThrow - 1, buttonIndex);
             Module.HandlePass();
             isModuleSolved = true;
             Debug.LogFormat("[X01 #{0}] Module Solved with Solution: {1}", _moduleId, PlayerDartHistory);
             return;
+        }
+
+        // For autosolver
+        if (PlayerHasPathToSolution(PlayerScoreRemaining, PlayerDartsRemaining, PlayerDartHistory))
+        {
+            var p = new List<string>();
+            var c = CorrectSolutions[0].Split(' ');
+            for (int i = TotalDartsToThrow - PlayerDartsRemaining; i < c.Length; i++)
+                p.Add(c[i]);
+            var p2 = p.ToArray();
+            _pathBtns = new List<int>();
+            _pathBtns = GetPathFromStrings(p2);
         }
 
         if (!PlayerHasPathToSolution(PlayerScoreRemaining, PlayerDartsRemaining, PlayerDartHistory))
@@ -855,20 +874,22 @@ public class x01_script : MonoBehaviour
             return;
         }
 
+        CorrectSolutions = new List<string>();
+        AttemptToClose(TargetScore, TotalDartsToThrow, string.Empty);
         // Play dart sound
         RenderPlayerDart(TotalDartsToThrow - PlayerDartsRemaining - 1, buttonIndex);
         Audio.PlaySoundAtTransform("gooddart", Module.transform);
 
     }
+    // AAAAAAAAAAAAAAAAAAA
+
     private bool PlayerHasPathToSolution(int remainingScore, int dartsRemaining, string solutionSoFar)
     {
         if (remainingScore < 2 || dartsRemaining < 1)
             return false;
-
         if (dartsRemaining == 1)
         {
             bool foundPath = false;
-
             // Last dart must hit a double
             for (int iter = 0; iter < doubleValues.Count && !foundPath; iter++)
             {
@@ -890,7 +911,10 @@ public class x01_script : MonoBehaviour
                         bool thisSolutionIsValid = true;
                         string candidate = solutionSoFar + "D" + (iter == 10 ? "B" : segValues[iter].ToString());
                         string[] individualDarts = candidate.Split(new char[] { ' ' }, System.StringSplitOptions.RemoveEmptyEntries);
-                        
+                        indivDarts = new string[individualDarts.Length];
+                        for (int i = 0; i < indivDarts.Length; i++)
+                            indivDarts[i] = individualDarts[i];
+
                         if (Restrictions.Contains("C"))
                         {
                             bool bFoundBottomHalfOfBoardDouble = false;
@@ -952,7 +976,9 @@ public class x01_script : MonoBehaviour
                         }
 
                         if (thisSolutionIsValid)
+                        {
                             foundPath = true;
+                        }
                     }
                 }
             }
@@ -988,7 +1014,6 @@ public class x01_script : MonoBehaviour
                 // If we get to this part of the code and there's a Double in the history, they dun goofed up.
                 if (solutionSoFar.Contains("D"))
                     return false;
-
                 if (!solutionSoFar.Contains("T"))
                 {
                     bool bSolFound = false;
@@ -1023,8 +1048,9 @@ public class x01_script : MonoBehaviour
                 bool bFoundEvenTreble = false;
                 if (solutionSoFar.Contains("T"))
                 {
+
                     string[] individualDarts = solutionSoFar.Split(new char[] { ' ' }, System.StringSplitOptions.RemoveEmptyEntries);
-                    for (int iter=0; iter<individualDarts.Length; iter++)
+                    for (int iter = 0; iter < individualDarts.Length; iter++)
                     {
                         if (individualDarts[iter].StartsWith("T"))
                         {
@@ -1070,9 +1096,8 @@ public class x01_script : MonoBehaviour
             }
             for (int treblesIter = 0; treblesIter < trebleValues.Count && !bSolFoundFromExhaustiveSearch; treblesIter++)
             {
-                bSolFoundFromExhaustiveSearch = bSolFoundFromExhaustiveSearch || PlayerHasPathToSolution(remainingScore - trebleValues[treblesIter], dartsRemaining - 1, solutionSoFar + "T" + (treblesIter == 10 ? "B" : trebleValues[treblesIter].ToString()) + " ");
+                bSolFoundFromExhaustiveSearch = bSolFoundFromExhaustiveSearch || PlayerHasPathToSolution(remainingScore - trebleValues[treblesIter], dartsRemaining - 1, solutionSoFar + "T" + (treblesIter == 10 ? "B" : segValues[treblesIter].ToString()) + " ");
             }
-
             return bSolFoundFromExhaustiveSearch;
         }
     }
@@ -1123,12 +1148,19 @@ public class x01_script : MonoBehaviour
     public string TwitchHelpMessage = "Select segments with !{0} throw (SegmentName). Use IN and OUT for singles (e.g. IN6, OUT20), D for doubles (D16), T for trebles (T13), SB and DB for single and double bullseye. You can select multiple segments at a time (e.g. \"!{0} throw T3 OUT15 D20\")";
     IEnumerator ProcessTwitchCommand(string command)
     {
+        var m = Regex.Match(command, @"^\s*close\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+        if (m.Success)
+        {
+            yield return null;
+            Debug.Log(CorrectSolutions[0]);
+            yield break;
+        }
         string[] parts = command.ToUpper().Split(new char[] { ' ' }, System.StringSplitOptions.RemoveEmptyEntries);
         if (parts[0].Equals("THROW") || parts[0].Equals("PRESS"))
         {
             bool noErrors = true;
             List<int> buttonsToPress = new List<int>();
-            for (int iter=1; iter < parts.Length; iter++)
+            for (int iter = 1; iter < parts.Length; iter++)
             {
                 if (parts[iter] == "SB")
                 {
@@ -1255,7 +1287,7 @@ public class x01_script : MonoBehaviour
     private int GetSegIndexForValue(int val)
     {
         int retIndex = -1;
-        for (int iter=0; iter < 10 && retIndex==-1; iter++)
+        for (int iter = 0; iter < 10 && retIndex == -1; iter++)
         {
             if (segValues[iter] == val)
             {
@@ -1263,5 +1295,53 @@ public class x01_script : MonoBehaviour
             }
         }
         return retIndex;
+    }
+
+    private IEnumerator TwitchHandleForcedSolve()
+    {
+        yield return null;
+        if (_pathBtns == null)
+            _pathBtns = GetPathFromStrings(CorrectSolutions[0].Split(' '));
+        while (!isModuleSolved)
+        {
+            Buttons[_pathBtns[0]].OnInteract();
+            if (!isModuleSolved)
+                yield return new WaitForSeconds(1.2f);
+        }
+    }
+
+    private List<int> GetPathFromStrings(string[] path)
+    {
+        var p = new string[path.Length];
+        var pathBtns = new List<int>();
+        for (int i = 0; i < p.Length; i++)
+        {
+            p[i] = path[i];
+        }
+        for (int i = 0; i < p.Length; i++)
+        {
+            if (p[i] == "SB")
+            {
+                pathBtns.Add(40);
+                continue;
+            }
+            if (p[i] == "DB")
+            {
+                pathBtns.Add(41);
+                continue;
+            }
+            int num;
+            int.TryParse(p[i].Substring(1), out num);
+            int ix = Array.IndexOf(segValues.ToArray(), num);
+            int offset = 0;
+            if (p[i][0] == 'S' && buttonHasBeenPressed[ix])
+                offset = 10;
+            if (p[i][0] == 'D')
+                offset = 20;
+            if (p[i][0] == 'T')
+                offset = 30;
+            pathBtns.Add(offset + ix);
+        }
+        return pathBtns;
     }
 }

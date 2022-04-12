@@ -11,10 +11,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 615501dbe4f3fe94fbf4b564abb10237, type: 3}
   m_Name: ModConfig
   m_EditorClassIdentifier: 
-  id: DartsX01
-  title: X01
-  description: 'Score the exact correct number of points, following standard X01 darts
-    rules, the determined number of darts, while minding the specific restrictions! '
-  version: 1.0
+  id: ShapeFillModule
+  title: Shape Fill
+  author: Quinn Wuest
+  description: 'Establish regularity in irregularity and familiarity in the unfamiliar.
+
+
+    Manual by Asew54321
+
+    Developed by Quinn Wuest'
+  version: 2.0
   outputFolder: build
-  previewImage: {fileID: 2800000, guid: 22124773ee3e77c4fb3156c24a390b59, type: 3}
+  previewImage: {fileID: 2800000, guid: 958c5ee78639bef47ad2cf6ff11eee92, type: 3}
