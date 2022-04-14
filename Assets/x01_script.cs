@@ -116,13 +116,13 @@ public class x01_script : MonoBehaviour
         // For debugging purposes, you can set a specific situation here, like this.
         if (false)
         {
-            segValues = new List<int>() { 2, 1, 5, 4, 17, 10, 6, 13, 7, 12 };
+            segValues = new List<int>() { 11, 13, 19, 9, 20, 6, 7, 4, 10, 17 };
             doubleValues = segValues.Select(i => i * 2).ToList();
             trebleValues = segValues.Select(i => i * 3).ToList();
 
-            TargetScore = 71;
+            TargetScore = 57;
             TotalDartsToThrow = 3;
-            Restrictions = "CG";
+            Restrictions = "AF";
         }
 
         while (!IsPuzzleSovable())
@@ -855,15 +855,7 @@ public class x01_script : MonoBehaviour
 
         // For autosolver
         if (PlayerHasPathToSolution(PlayerScoreRemaining, PlayerDartsRemaining, PlayerDartHistory))
-        {
-            var p = new List<string>();
-            var c = CorrectSolutions[0].Split(' ');
-            for (int i = TotalDartsToThrow - PlayerDartsRemaining; i < c.Length; i++)
-                p.Add(c[i]);
-            var p2 = p.ToArray();
-            _pathBtns = new List<int>();
-            _pathBtns = GetPathFromStrings(p2);
-        }
+            SetSolutionPath();
 
         if (!PlayerHasPathToSolution(PlayerScoreRemaining, PlayerDartsRemaining, PlayerDartHistory))
         {
@@ -873,9 +865,6 @@ public class x01_script : MonoBehaviour
             GenerateSolvablePuzzle();
             return;
         }
-
-        CorrectSolutions = new List<string>();
-        AttemptToClose(TargetScore, TotalDartsToThrow, string.Empty);
         // Play dart sound
         RenderPlayerDart(TotalDartsToThrow - PlayerDartsRemaining - 1, buttonIndex);
         Audio.PlaySoundAtTransform("gooddart", Module.transform);
@@ -1292,8 +1281,7 @@ public class x01_script : MonoBehaviour
     private IEnumerator TwitchHandleForcedSolve()
     {
         yield return null;
-        if (_pathBtns == null)
-            _pathBtns = GetPathFromStrings(CorrectSolutions[0].Split(' '));
+        SetSolutionPath();
         while (!isModuleSolved)
         {
             Buttons[_pathBtns[0]].OnInteract();
@@ -1336,4 +1324,18 @@ public class x01_script : MonoBehaviour
         }
         return pathBtns;
     }
+
+    private void SetSolutionPath()
+    {
+        CorrectSolutions = new List<string>();
+        AttemptToClose(PlayerScoreRemaining, PlayerDartsRemaining, PlayerDartHistory);
+        var p = new List<string>();
+        var c = CorrectSolutions[0].Split(' ');
+        for (int i = TotalDartsToThrow - PlayerDartsRemaining; i < c.Length; i++)
+            p.Add(c[i]);
+        var p2 = p.ToArray();
+        _pathBtns = new List<int>();
+        _pathBtns = GetPathFromStrings(p2);
+    }
 }
+
