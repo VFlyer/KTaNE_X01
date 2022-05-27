@@ -116,16 +116,16 @@ public class x01_script : MonoBehaviour
         // For debugging purposes, you can set a specific situation here, like this.
         if (false)
         {
-            segValues = new List<int>() { 11, 13, 19, 9, 20, 6, 7, 4, 10, 17 };
+            segValues = new List<int>() { 4, 5, 17, 3, 8, 2, 18, 14, 19, 1 };
             doubleValues = segValues.Select(i => i * 2).ToList();
             trebleValues = segValues.Select(i => i * 3).ToList();
 
-            TargetScore = 57;
+            TargetScore = 76;
             TotalDartsToThrow = 3;
-            Restrictions = "AF";
+            Restrictions = "CG";
         }
 
-        while (!IsPuzzleSovable())
+        while (!IsPuzzleSolvable())
         {
             GenerateRandomBoard();
             ObtainTargetScore();
@@ -362,6 +362,53 @@ public class x01_script : MonoBehaviour
                                 thisSolutionIsValid = false;
                             }
                         }
+                        if (thisSolutionIsValid && Restrictions.Contains("F"))
+                        {
+                            bool bFoundTreble = false;
+                            for (int candidtaeIter = 0; candidtaeIter < individualDarts.Length && !bFoundTreble; candidtaeIter++)
+                            {
+                                if (individualDarts[candidtaeIter].StartsWith("T"))
+                                {
+                                    int segValue = -1;
+                                    if (int.TryParse(individualDarts[candidtaeIter].Substring(1), out segValue))
+                                    {
+                                        bFoundTreble = true;
+                                    }
+                                }
+                            }
+                            if (!bFoundTreble)
+                            {
+                                thisSolutionIsValid = false;
+                            }
+                        }
+                        if (thisSolutionIsValid && Restrictions.Contains("G"))
+                        {
+                            bool bFoundSingle = false;
+                            bool bFoundTreble = false;
+                            for (int candidtaeIter = 0; candidtaeIter < individualDarts.Length && (!bFoundTreble || !bFoundSingle); candidtaeIter++)
+                            {
+                                if (individualDarts[candidtaeIter].StartsWith("S"))
+                                {
+                                    int segValue = -1;
+                                    if (int.TryParse(individualDarts[candidtaeIter].Substring(1), out segValue))
+                                    {
+                                        bFoundSingle = true;
+                                    }
+                                }
+                                if (individualDarts[candidtaeIter].StartsWith("T"))
+                                {
+                                    int segValue = -1;
+                                    if (int.TryParse(individualDarts[candidtaeIter].Substring(1), out segValue))
+                                    {
+                                        bFoundTreble = true;
+                                    }
+                                }
+                            }
+                            if (!bFoundTreble || !bFoundSingle)
+                            {
+                                thisSolutionIsValid = false;
+                            }
+                        }
                         if (thisSolutionIsValid && Restrictions.Contains("H"))
                         {
                             bool bFoundEvenSegmentTreble = false;
@@ -593,7 +640,7 @@ public class x01_script : MonoBehaviour
         if (chMultiplier == 'D') mult = 2; else if (chMultiplier == 'T') mult = 3;
         return mult * segVal;
     }
-    private bool IsPuzzleSovable()
+    private bool IsPuzzleSolvable()
     {
         // Before attempting to solve, put the bullseyes in the singles and doubles values lists
         segValues.Add(25);
@@ -855,9 +902,9 @@ public class x01_script : MonoBehaviour
 
         // For autosolver
         if (PlayerHasPathToSolution(PlayerScoreRemaining, PlayerDartsRemaining, PlayerDartHistory))
-            SetSolutionPath();
+            GetSolutionPaths();
 
-        if (!PlayerHasPathToSolution(PlayerScoreRemaining, PlayerDartsRemaining, PlayerDartHistory))
+        if (!PlayerHasPathToSolution(PlayerScoreRemaining, PlayerDartsRemaining, PlayerDartHistory) || CorrectSolutions.Count == 0)
         {
             Debug.LogFormat("[X01 #{0}] However, there is no way to close {1} points with {2} dart(s), while following all restrictions, at this point. Strike assessed, resetting module.", _moduleId, PlayerScoreRemaining, PlayerDartsRemaining);
             Module.HandleStrike();
@@ -868,7 +915,6 @@ public class x01_script : MonoBehaviour
         // Play dart sound
         RenderPlayerDart(TotalDartsToThrow - PlayerDartsRemaining - 1, buttonIndex);
         Audio.PlaySoundAtTransform("gooddart", Module.transform);
-
     }
 
     private bool PlayerHasPathToSolution(int remainingScore, int dartsRemaining, string solutionSoFar)
@@ -1281,7 +1327,7 @@ public class x01_script : MonoBehaviour
     private IEnumerator TwitchHandleForcedSolve()
     {
         yield return null;
-        SetSolutionPath();
+        GetSolutionPaths();
         while (!isModuleSolved)
         {
             Buttons[_pathBtns[0]].OnInteract();
@@ -1325,7 +1371,7 @@ public class x01_script : MonoBehaviour
         return pathBtns;
     }
 
-    private void SetSolutionPath()
+    private void GetSolutionPaths()
     {
         CorrectSolutions = new List<string>();
         AttemptToClose(PlayerScoreRemaining, PlayerDartsRemaining, PlayerDartHistory);
@@ -1336,6 +1382,13 @@ public class x01_script : MonoBehaviour
         var p2 = p.ToArray();
         _pathBtns = new List<int>();
         _pathBtns = GetPathFromStrings(p2);
+        Debug.LogFormat("[X01 #{0}] There {1} now {2} correct solution{3} remaining{4} {5}.",
+            _moduleId,
+            CorrectSolutions.Count == 1 ? "is" : "are",
+            CorrectSolutions.Count,
+            CorrectSolutions.Count == 1 ? "" : "s",
+            CorrectSolutions.Count == 1 ? ":" : ". For example,",
+            CorrectSolutions[0]);
     }
 }
 
