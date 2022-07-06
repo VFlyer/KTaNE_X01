@@ -43,7 +43,7 @@ public class x01_script : MonoBehaviour
     private float[] fadeInStartTimes;
     private bool isShowHappening = false;
 
-    // For autosolver
+    // For autosolver. Contact Quinn Wuest if there are any problems.
     private string[] indivDarts;
     private List<int> _pathBtns;
 
@@ -928,7 +928,7 @@ public class x01_script : MonoBehaviour
             return;
         }
 
-        // For autosolver
+        // For autosolver. Contact Quinn Wuest if there are any problems.
         if (PlayerHasPathToSolution(PlayerScoreRemaining, PlayerDartsRemaining, PlayerDartHistory))
             GetSolutionPaths();
 
@@ -1364,6 +1364,7 @@ public class x01_script : MonoBehaviour
         }
     }
 
+    // For autosolver. Contact Quinn Wuest if there are any problems.
     private List<int> GetPathFromStrings(string[] path)
     {
         var p = new string[path.Length];
@@ -1399,6 +1400,7 @@ public class x01_script : MonoBehaviour
         return pathBtns;
     }
 
+    // For autosolver. Contact Quinn Wuest if there are any problems.
     private void GetSolutionPaths()
     {
         CorrectSolutions = new List<string>();
