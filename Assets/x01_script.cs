@@ -116,11 +116,11 @@ public class x01_script : MonoBehaviour
         // For debugging purposes, you can set a specific situation here, like this.
         if (false)
         {
-            segValues = new List<int>() { 4, 5, 17, 3, 8, 2, 18, 14, 19, 1 };
+            segValues = new List<int>() { 12, 6, 5, 3, 11, 15, 14, 13, 10, 7 };
             doubleValues = segValues.Select(i => i * 2).ToList();
             trebleValues = segValues.Select(i => i * 3).ToList();
 
-            TargetScore = 76;
+            TargetScore = 48;
             TotalDartsToThrow = 3;
             Restrictions = "CG";
         }
@@ -362,6 +362,19 @@ public class x01_script : MonoBehaviour
                                 thisSolutionIsValid = false;
                             }
                         }
+                        if (thisSolutionIsValid && Restrictions.Contains("E"))
+                        {
+                            bool bFoundBullseye = false;
+                            for (int candidateIter = 0; candidateIter < individualDarts.Length && !bFoundBullseye; candidateIter++)
+                            {
+                                if (individualDarts[candidateIter] == "SB")
+                                    bFoundBullseye = true;
+                            }
+                            if (!bFoundBullseye)
+                            {
+                                thisSolutionIsValid = false;
+                            }
+                        }
                         if (thisSolutionIsValid && Restrictions.Contains("F"))
                         {
                             bool bFoundTreble = false;
@@ -578,18 +591,33 @@ public class x01_script : MonoBehaviour
                             AttemptToClose(remainingScore - trebleValues[iter], dartsRemaining - 1, "T" + segValues[iter] + " ");
                         }
                     }
+                    for (int iter = 0; iter < segValues.Count; iter++)
+                    {
+                        // No point in checking if this treble busts us.
+                        if (segValues[iter] < remainingScore)
+                        {
+                            AttemptToClose(remainingScore - segValues[iter], dartsRemaining - 1, "S" + (iter == 10 ? "B" : segValues[iter].ToString()) + " ");
+                        }
+                    }
                 }
                 else if (dartsRemaining == TotalDartsToThrow - 1)
                 {
                     bTryEveryPossibleCombo = false;
+                    for (int iter = 0; iter < trebleValues.Count; iter++)
+                    {
+                        // No point in checking if this treble busts us.
+                        if (trebleValues[iter] < remainingScore)
+                        {
+                            AttemptToClose(remainingScore - trebleValues[iter], dartsRemaining - 1, solutionSoFar + "T" + segValues[iter] + " ");
+                        }
+                    }
                     // Use one dart to hit a single
                     for (int iter = 0; iter < segValues.Count; iter++)
                     {
                         // No point in checking if this treble busts us.
                         if (segValues[iter] < remainingScore)
                         {
-                            string segNotation = (iter == 10 ? "B" : segValues[iter].ToString());
-                            AttemptToClose(remainingScore - segValues[iter], dartsRemaining - 1, solutionSoFar + "S" + segNotation + " ");
+                            AttemptToClose(remainingScore - segValues[iter], dartsRemaining - 1, solutionSoFar + "S" + (iter == 10 ? "B" : segValues[iter].ToString()) + " ");
                         }
                     }
                 }
