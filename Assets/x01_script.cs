@@ -9,6 +9,33 @@ using System.Text.RegularExpressions;
 
 public class x01_script : MonoBehaviour
 {
+    /*
+    If the module has not been interacted with, the autosolver can simply pick the solution path listed in the example logging.
+    However, if there has been interaction, the example answer can change.
+    This led to the following bugs being discovered:
+
+    - The CorrectSolutions list is populated with the solutions only upon the initial generation. (In the AttemptToClose method).
+    It is NOT cleared/repopulated when interaction has happened with the module,
+    therefore making the autosolver code pick the wrong solution path.
+    (Along with this, new logging was added, which includes new examples upon each press.)
+    
+    - The module sometimes didnt't strike the user if there are no found solutions.
+    
+    - The "Exhaustive Search" section of the initial check used the wrong values for the treble values.
+    (Equivalent, using the triple of the treble values, or 9x the single values.)
+    
+    - Restrictions E, F, and G are not checked at all, unless all darts have been thrown.
+    This led to the autosolver using a solution that was thought to be acceptable, but wasn't, causing a strike.
+    
+    - Restriction G's check (must use single/double/triple) was innacurately coded.
+    In the final calculation, where all darts have been thrown, the solution checks for both T/S/D or S/T/D,
+    but the initial check only looks for T/S/D, and not S/T/D.
+    This previosly didn't pop up, because the previously mentioned bug about the module not striking didn't strike when it thought it should.
+    Once the striking bug was fixed, this new bug was discovered.
+    
+    - At the final calculation, Restriction G didn't properly include single bullseye as a single segment nor double bullseye as a double segment.
+    (It checks if values 40 (SB) and 41 (DB) exist, but the for loop only goes up to 40.)
+    */
 
     public KMAudio Audio;
     public KMBombModule Module;
