@@ -1387,7 +1387,7 @@ public class x01_script : MonoBehaviour
         {
             Buttons[_pathBtns[0]].OnInteract();
             if (!isModuleSolved)
-                yield return new WaitForSeconds(1.2f);
+                yield return new WaitForSeconds(.5f);
         }
     }
 
