@@ -11,13 +11,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 615501dbe4f3fe94fbf4b564abb10237, type: 3}
   m_Name: ModConfig
   m_EditorClassIdentifier: 
-  id: ShapeFillModule
-  title: Shape Fill
-  author: Quinn Wuest
+  id: X01
+  title: X01
+  author: SillyPuppy
   description: "Score the exact correct number of points, following standard X01 darts
     rules, the determined number of darts, while minding the specific restrictions!
     \r\n\r\nInitially created by SillyPuppy, reuploaded with permission for bug fixes.
-    Please unsubscribe from [url=https://steamcommunity.com/sharedfiles/filedetails/?id=1381875427]here[/url]."
+    Please unsubscribe from the old version found [url=https://steamcommunity.com/sharedfiles/filedetails/?id=1381875427]here[/url]."
   version: 2.0
   outputFolder: build
   previewImage: {fileID: 2800000, guid: 22124773ee3e77c4fb3156c24a390b59, type: 3}
