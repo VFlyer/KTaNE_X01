@@ -80,6 +80,8 @@ public class x01_script : MonoBehaviour
         _moduleId = _moduleIdCounter++;
         Module.OnActivate += Activate;
 
+        for (int i = 0; i < 10; i++)
+            SegmentLabelObjects[i].text = "";
         fadeInStartTimes = new float[10];
     }
 

@@ -11903,7 +11903,7 @@ TextMesh:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1503528849179160}
-  m_Text: Seg1
+  m_Text: 
   m_OffsetZ: 0
   m_CharacterSize: 0.008
   m_LineSpacing: 1
@@ -11924,7 +11924,7 @@ TextMesh:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1724381965092700}
-  m_Text: Seg2
+  m_Text: 
   m_OffsetZ: 0
   m_CharacterSize: 0.008
   m_LineSpacing: 1
@@ -11945,7 +11945,7 @@ TextMesh:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1782331324197658}
-  m_Text: Seg8
+  m_Text: 
   m_OffsetZ: 0
   m_CharacterSize: 0.008
   m_LineSpacing: 1
@@ -11966,7 +11966,7 @@ TextMesh:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1932309911525836}
-  m_Text: Seg4
+  m_Text: 
   m_OffsetZ: 0
   m_CharacterSize: 0.008
   m_LineSpacing: 1
@@ -11987,7 +11987,7 @@ TextMesh:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1616300417376116}
-  m_Text: Seg3
+  m_Text: 
   m_OffsetZ: 0
   m_CharacterSize: 0.008
   m_LineSpacing: 1
@@ -12008,7 +12008,7 @@ TextMesh:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1569351307895970}
-  m_Text: Seg5
+  m_Text: 
   m_OffsetZ: 0
   m_CharacterSize: 0.008
   m_LineSpacing: 1
@@ -12029,7 +12029,7 @@ TextMesh:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1011393096744904}
-  m_Text: Seg9
+  m_Text: 
   m_OffsetZ: 0
   m_CharacterSize: 0.008
   m_LineSpacing: 1
@@ -12050,7 +12050,7 @@ TextMesh:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1117753532446428}
-  m_Text: Seg0
+  m_Text: 
   m_OffsetZ: 0
   m_CharacterSize: 0.008
   m_LineSpacing: 1
@@ -12071,7 +12071,7 @@ TextMesh:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1046187846689092}
-  m_Text: Seg7
+  m_Text: 
   m_OffsetZ: 0
   m_CharacterSize: 0.008
   m_LineSpacing: 1
@@ -12092,7 +12092,7 @@ TextMesh:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1128857931651852}
-  m_Text: Seg6
+  m_Text: 
   m_OffsetZ: 0
   m_CharacterSize: 0.008
   m_LineSpacing: 1

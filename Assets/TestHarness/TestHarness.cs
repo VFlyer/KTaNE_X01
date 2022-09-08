@@ -9,7 +9,7 @@ using Random = UnityEngine.Random;
 
 public class FakeBombInfo : MonoBehaviour
 {
-    float startupTime = .5f;
+    float startupTime = 0.5f;
 
     public KMAudio Audio;
 
