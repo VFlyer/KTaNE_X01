@@ -145,13 +145,13 @@ public class x01_script : MonoBehaviour
         // For debugging purposes, you can set a specific situation here, like this.
         if (false)
         {
-            segValues = new List<int>() { 12, 6, 5, 3, 11, 15, 14, 13, 10, 7 };
+            segValues = new List<int>() { 11, 20, 17, 9, 19, 5, 12, 15, 13, 16 };
             doubleValues = segValues.Select(i => i * 2).ToList();
             trebleValues = segValues.Select(i => i * 3).ToList();
 
-            TargetScore = 48;
+            TargetScore = 80;
             TotalDartsToThrow = 3;
-            Restrictions = "CG";
+            Restrictions = "AF";
         }
 
         while (!IsPuzzleSolvable())
@@ -957,9 +957,14 @@ public class x01_script : MonoBehaviour
             return;
         }
 
+        CorrectSolutions = new List<string>();
+        AttemptToClose(PlayerScoreRemaining, PlayerDartsRemaining, PlayerDartHistory);
+
         // For autosolver. Contact Quinn Wuest if there are any problems.
-        if (PlayerHasPathToSolution(PlayerScoreRemaining, PlayerDartsRemaining, PlayerDartHistory))
+        if (PlayerHasPathToSolution(PlayerScoreRemaining, PlayerDartsRemaining, PlayerDartHistory) && CorrectSolutions.Count != 0)
+        {
             GetSolutionPaths();
+        }
 
         if (!PlayerHasPathToSolution(PlayerScoreRemaining, PlayerDartsRemaining, PlayerDartHistory) || CorrectSolutions.Count == 0)
         {
@@ -1432,8 +1437,6 @@ public class x01_script : MonoBehaviour
     // For autosolver. Contact Quinn Wuest if there are any problems.
     private void GetSolutionPaths()
     {
-        CorrectSolutions = new List<string>();
-        AttemptToClose(PlayerScoreRemaining, PlayerDartsRemaining, PlayerDartHistory);
         var p = new List<string>();
         var c = CorrectSolutions[0].Split(' ');
         for (int i = TotalDartsToThrow - PlayerDartsRemaining; i < c.Length; i++)
