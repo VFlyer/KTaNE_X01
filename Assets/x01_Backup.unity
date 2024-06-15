@@ -370,6 +370,11 @@ Prefab:
       propertyPath: HighlightScale.z
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 114112557654109952, guid: 72576aa45727f9147b1a27622e2ddf5c,
+        type: 2}
+      propertyPath: debugModule
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 72576aa45727f9147b1a27622e2ddf5c, type: 2}
   m_IsPrefabParent: 0

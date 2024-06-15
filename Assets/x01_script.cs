@@ -74,6 +74,9 @@ public class x01_script : MonoBehaviour
     private string[] indivDarts;
     private List<int> _pathBtns;
 
+    // For debugging purposes.
+    [SerializeField]
+    private bool debugModule;
     // Use this for initialization
     void Start()
     {
@@ -143,15 +146,15 @@ public class x01_script : MonoBehaviour
         ObtainDartCountAndRestrictionSet();
 
         // For debugging purposes, you can set a specific situation here, like this.
-        if (false)
+        if (debugModule)
         {
-            segValues = new List<int>() { 11, 20, 17, 9, 19, 5, 12, 15, 13, 16 };
+            segValues = new List<int>() { 7, 3, 11, 1, 13, 19, 15, 16, 9, 4 };
             doubleValues = segValues.Select(i => i * 2).ToList();
             trebleValues = segValues.Select(i => i * 3).ToList();
 
-            TargetScore = 80;
-            TotalDartsToThrow = 3;
-            Restrictions = "AF";
+            TargetScore = 63;
+            TotalDartsToThrow = 4;
+            Restrictions = "DH";
         }
 
         while (!IsPuzzleSolvable())
