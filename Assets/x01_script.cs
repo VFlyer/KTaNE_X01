@@ -172,7 +172,7 @@ public class x01_script : MonoBehaviour
         Debug.LogFormat("[X01 #{0}] Generated a solvable board with {1} correct solutions. For example, {2}.", _moduleId, CorrectSolutions.Count, CorrectSolutions[0].ToString());
         Debug.LogFormat("[X01 #{0}] Segment Values, clockwise, starting with North: {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}", _moduleId, segValues[0], segValues[1], segValues[2], segValues[3], segValues[4],
             segValues[5], segValues[6], segValues[7], segValues[8], segValues[9]);
-        Debug.LogFormat("[X01 #{0}] Defuser needs to throw {1} darts for exactly {2} points, with restrictions: {3}.", _moduleId, TotalDartsToThrow, TargetScore, Restrictions);
+        Debug.LogFormat("[X01 #{0}] Defuser needs to throw {1} darts for exactly {2} points, with restrictions: {3}.", _moduleId, TotalDartsToThrow, TargetScore, Restrictions == "" ? "<none>" : Restrictions);
     }
     private void GenerateRandomBoard()
     {
@@ -581,7 +581,7 @@ public class x01_script : MonoBehaviour
                 }
             }
         }
-        else
+        else if (dartsRemaining > 1)
         {
             if (Restrictions.Contains("E") && (dartsRemaining == TotalDartsToThrow))
             {

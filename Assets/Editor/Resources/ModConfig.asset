@@ -18,6 +18,6 @@ MonoBehaviour:
     rules, the determined number of darts, while minding the specific restrictions!
     \r\n\r\nInitially created by SillyPuppy, reuploaded with permission for bug fixes.
     Please unsubscribe from the old version found [url=https://steamcommunity.com/sharedfiles/filedetails/?id=1381875427]here[/url]."
-  version: 2.0
+  version: 2.0.1
   outputFolder: build
   previewImage: {fileID: 2800000, guid: 25777143fb9bfcb4f8880f502d3862f8, type: 3}
