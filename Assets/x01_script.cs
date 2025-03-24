@@ -148,13 +148,13 @@ public class x01_script : MonoBehaviour
         // For debugging purposes, you can set a specific situation here, like this.
         if (debugModule)
         {
-            segValues = new List<int>() { 7, 3, 11, 1, 13, 19, 15, 16, 9, 4 };
+            segValues = new List<int>() { 2, 7, 20, 4, 19, 5, 12, 11, 10, 3 };
             doubleValues = segValues.Select(i => i * 2).ToList();
             trebleValues = segValues.Select(i => i * 3).ToList();
 
-            TargetScore = 63;
-            TotalDartsToThrow = 4;
-            Restrictions = "DH";
+            TargetScore = 51;
+            TotalDartsToThrow = 3;
+            Restrictions = "BEI";
         }
 
         while (!IsPuzzleSolvable())
