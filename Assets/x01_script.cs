@@ -106,6 +106,8 @@ public class x01_script : MonoBehaviour
             if (allShowsFinished)
             {
                 isShowHappening = false;
+                for (var x = 0; x < 10; x++)
+                    SegmentLabelObjects[x].color = Color.black;
             }
         }
     }
